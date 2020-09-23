@@ -12,7 +12,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN sed -i.bak 's/us-east-1\.ec2\.//' /etc/apt/sources.list \
   && wget -qO - https://ftp-master.debian.org/keys/archive-key-10.asc | apt-key add - \
   && echo deb http://deb.debian.org/debian buster main contrib non-free | tee -a /etc/apt/sources.list \
-  && apt -qq update \
+  && apt update \
   && apt -qq install -y --no-install-recommends \
     curl \
     wget \
