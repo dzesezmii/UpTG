@@ -33,9 +33,8 @@ RUN mkdir /app/gautam \
   && apt -qq update \
   && apt -qq install -y --no-install-recommends unrar \
   && pip install --no-cache-dir -r requirements.txt \
-  && apt remove -y git \
-  && apt autoremove -y \
   && apt clean autoclean \
+  && apt autoremove --yes \
   && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 COPY . .
