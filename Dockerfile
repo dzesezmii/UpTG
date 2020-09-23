@@ -1,26 +1,48 @@
-FROM ubuntu:20.04
+FROM alpine:3.4
 
-
-RUN mkdir ./app
-RUN chmod 777 ./app
+RUN mkdir ./app \
+    && chmod 777 ./app
 WORKDIR /app
 
-RUN apt -qq update
+RUN apk add --update --no-cache \
+    build-base \
+    openssl \
+    fuse \
+    ca-certificates \
+    curl \
+    wget \
+    unzip \
+    unrar \
+    tar \
+    git \
+    busybox \
+    python3 \
+    python3-dev \
+    py3-pip \
+    ffmpeg \
+    aria2 \
+    bash \
+  && cd /usr/bin \
+  && ln -sf python3.5 python \
+  && ln -sf pip3.5 pip
 
-ENV DEBIAN_FRONTEND=noninteractive
-ENV TZ=Asia/Kolkata
+RUN cd /tmp \
+  && curl -O https://downloads.rclone.org/rclone-current-linux-amd64.zip \
+  && unzip /tmp/rclone-current-linux-amd64.zip \
+  && cd rclone-*-linux-amd64 \
+  && cp rclone /usr/bin/ \
+  && chown root:root /usr/bin/rclone \
+  && chmod 755 /usr/bin/rclone
 
-
-RUN apt -qq install -y git aria2 wget curl busybox unzip unrar tar python3 ffmpeg python3-pip
-RUN wget https://rclone.org/install.sh
-RUN bash install.sh
-
-RUN mkdir /app/gautam
-RUN wget -O /app/gautam/gclone.gz https://git.io/JJMSG
-RUN gzip -d /app/gautam/gclone.gz
-RUN chmod 0775 /app/gautam/gclone
+RUN mkdir /app/gautam \
+  && wget -O /app/gautam/gclone.gz https://git.io/JJMSG \
+  && gzip -d /app/gautam/gclone.gz \
+  && chmod 0775 /app/gautam/gclone \
+  && rm -rf /tmp/* \
+    /var/cache/* \
+    /var/lib/apt/lists/*
 
 COPY requirements.txt .
-RUN pip3 install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 CMD ["bash","start.sh"]
