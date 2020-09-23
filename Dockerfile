@@ -23,6 +23,8 @@ RUN sed -i.bak 's/us-east-1\.ec2\.//' /etc/apt/sources.list \
     gnupg2 \
   && curl https://rclone.org/install.sh | bash
 
+COPY requirements.txt .
+
 RUN mkdir /app/gautam \
   && wget -O /app/gautam/gclone.gz https://git.io/JJMSG \
   && gzip -d /app/gautam/gclone.gz \
@@ -30,13 +32,12 @@ RUN mkdir /app/gautam \
   && wget -qO - https://ftp-master.debian.org/keys/archive-key-10.asc | apt-key add - \
   && echo deb http://deb.debian.org/debian buster main contrib non-free | tee -a /etc/apt/sources.list \
   && apt -qq update \
-  && apt -qq install -y --no-install-recommends unrar
-
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt \
-  && apt purge git \
+  && apt -qq install -y --no-install-recommends unrar \
+  && pip install --no-cache-dir -r requirements.txt
+  && apt remove git \
   && apt autoremove -y \
   && apt clean autoclean \
   && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
 COPY . .
 CMD ["bash","start.sh"]
