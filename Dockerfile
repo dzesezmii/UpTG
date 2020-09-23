@@ -30,13 +30,13 @@ RUN mkdir /app/gautam \
   && wget -qO - https://ftp-master.debian.org/keys/archive-key-10.asc | apt-key add - \
   && echo deb http://deb.debian.org/debian buster main contrib non-free | tee -a /etc/apt/sources.list \
   && apt -qq update \
-  && apt -qq install -y --no-install-recommends unrar \
+  && apt -qq install -y --no-install-recommends unrar
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt \
   && apt purge git \
   && apt autoremove -y \
   && apt clean autoclean \
   && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 CMD ["bash","start.sh"]
