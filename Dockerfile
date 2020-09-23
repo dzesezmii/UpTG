@@ -7,9 +7,8 @@ WORKDIR /app
 ENV LANG C.UTF-8
 ENV DEBIAN_FRONTEND=noninteractive
 
-#us-east-1 eu-west-1
-RUN sed -i.bak 's/us-east-1\.ec2\.//' /etc/apt/sources.list \
-  && apt -qq update \
+#us-east-1 eu-west-1 sed -i.bak 's/us-east-1\.ec2\.//' /etc/apt/sources.list \
+RUN apt -qq update \
   && apt -qq install -y --no-install-recommends \
     curl \
     wget \
@@ -20,11 +19,8 @@ RUN sed -i.bak 's/us-east-1\.ec2\.//' /etc/apt/sources.list \
     ffmpeg \
     aria2 \
     gnupg2 \
-  && curl https://rclone.org/install.sh | bash
-
-COPY requirements.txt .
-
-RUN mkdir /app/gautam \
+  && curl https://rclone.org/install.sh | bash \
+  && mkdir /app/gautam \
   && wget -O /app/gautam/gclone.gz https://git.io/JJMSG \
   && gzip -d /app/gautam/gclone.gz \
   && chmod 0775 /app/gautam/gclone \
@@ -33,9 +29,12 @@ RUN mkdir /app/gautam \
   && apt -qq update \
   && apt -qq install -y --no-install-recommends unrar \
   && pip install --no-cache-dir -r requirements.txt \
+  && apt-get remove --purge -y git $(apt-mark showauto) \
   && apt clean autoclean \
-  && apt autoremove --yes \
+  && apt autoremove -y \
   && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+COPY requirements.txt .
 
 COPY . .
 CMD ["bash","start.sh"]
