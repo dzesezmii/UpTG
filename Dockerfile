@@ -4,7 +4,14 @@ RUN mkdir ./app \
     && chmod 777 ./app
 WORKDIR /app
 
-RUN apk add --update --no-cache \
+ENV LANG C.UTF-8
+ENV TZ=Europe/London
+ENV DEBIAN_FRONTEND=noninteractive
+
+#us-east-1 eu-west-1
+RUN sed -i.bak 's/us-east-1\.ec2\.//' /etc/apt/sources.list && \
+    apt -qq update && \
+    apt -qq install -y --no-install-recommends \
     curl \
     wget \
     unzip \
