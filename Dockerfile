@@ -32,7 +32,7 @@ RUN mkdir /app/gautam \
   && echo deb http://deb.debian.org/debian buster main contrib non-free | tee -a /etc/apt/sources.list \
   && apt -qq update \
   && apt -qq install -y --no-install-recommends unrar \
-  && pip install --no-cache-dir -r requirements.txt
+  && pip install --no-cache-dir -r requirements.txt \
   && apt remove git \
   && apt autoremove -y \
   && apt clean autoclean \
