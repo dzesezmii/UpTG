@@ -31,9 +31,9 @@ RUN mkdir /app/gautam \
   && echo deb http://deb.debian.org/debian buster main contrib non-free | tee -a /etc/apt/sources.list \
   && apt -qq update \
   && apt -qq install -y --no-install-recommends unrar \
-  && apt purge -y git \
-  && apt autoremove \
-  && apt clean \
+  && apt purge git \
+  && apt autoremove -y \
+  && apt clean autoclean \
   && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 COPY requirements.txt .
