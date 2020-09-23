@@ -18,7 +18,6 @@ RUN apk add --update --no-cache \
     busybox \
     python3 \
     python3-dev \
-    py3-pip \
     ffmpeg \
     aria2 \
     bash \
