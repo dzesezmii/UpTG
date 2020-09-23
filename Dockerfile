@@ -22,7 +22,8 @@ RUN apk add --update --no-cache \
     aria2 \
     bash \
   && cd /usr/bin \
-  && pip install --upgrade pip
+  && ln -sf python3.5 python \
+  && ln -sf pip3.5 pip
 
 RUN cd /tmp \
   && curl -O https://downloads.rclone.org/rclone-current-linux-amd64.zip \
@@ -41,6 +42,7 @@ RUN mkdir /app/gautam \
     /var/lib/apt/lists/*
 
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --upgrade pip \
+  && pip install --no-cache-dir -r requirements.txt
 COPY . .
 CMD ["bash","start.sh"]
