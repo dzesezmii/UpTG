@@ -5,7 +5,6 @@ RUN mkdir ./app \
 WORKDIR /app
 
 ENV LANG C.UTF-8
-ENV TZ=Europe/London
 ENV DEBIAN_FRONTEND=noninteractive
 
 #us-east-1 eu-west-1
