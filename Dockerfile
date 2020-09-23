@@ -1,14 +1,10 @@
-FROM alpine:3.4
+FROM python:3.8-slim-buster
 
 RUN mkdir ./app \
     && chmod 777 ./app
 WORKDIR /app
 
 RUN apk add --update --no-cache \
-    build-base \
-    openssl \
-    fuse \
-    ca-certificates \
     curl \
     wget \
     unzip \
@@ -16,33 +12,18 @@ RUN apk add --update --no-cache \
     tar \
     git \
     busybox \
-    python3 \
-    python3-dev \
     ffmpeg \
     aria2 \
-    bash \
-  && cd /usr/bin \
-  && ln -sf python3.5 python \
-  && ln -sf pip3.5 pip
-
-RUN cd /tmp \
-  && curl -O https://downloads.rclone.org/rclone-current-linux-amd64.zip \
-  && unzip /tmp/rclone-current-linux-amd64.zip \
-  && cd rclone-*-linux-amd64 \
-  && cp rclone /usr/bin/ \
-  && chown root:root /usr/bin/rclone \
-  && chmod 755 /usr/bin/rclone
+  && curl https://rclone.org/install.sh | bash
 
 RUN mkdir /app/gautam \
   && wget -O /app/gautam/gclone.gz https://git.io/JJMSG \
   && gzip -d /app/gautam/gclone.gz \
   && chmod 0775 /app/gautam/gclone \
-  && rm -rf /tmp/* \
-    /var/cache/* \
-    /var/lib/apt/lists/*
+  && apt clean \
+  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 COPY requirements.txt .
-RUN pip install --upgrade pip \
-  && pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 CMD ["bash","start.sh"]
