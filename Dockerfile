@@ -22,8 +22,7 @@ RUN apk add --update --no-cache \
     aria2 \
     bash \
   && cd /usr/bin \
-  && ln -sf python3.5 python \
-  && ln -sf pip3.5 pip
+  && pip install --upgrade pip
 
 RUN cd /tmp \
   && curl -O https://downloads.rclone.org/rclone-current-linux-amd64.zip \
